@@ -12,21 +12,18 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Entity
 @Table(name = "USER")
 @Inheritance(strategy = InheritanceType.JOINED)
-@Primary
-public class User implements UserDetails,Serializable {
+public class User implements Serializable {
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO)
+    @GeneratedValue( strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    UUID id;
+    long id;
     @Column(name = "EMAIL")
     @Email(message = "email should be valid")
     String email;
@@ -43,6 +40,10 @@ public class User implements UserDetails,Serializable {
     String lastName;
     @Column(name = "PASSWORD")
     String password;
+    @Column(name = "IS_LOGGED_IN")
+    Boolean isLoggedIn;
+    @Column(name="ACCESS_TOKEN")
+    String accessToken;
     @Column(name = "IS_DELETED")
     Boolean isDeleted;
     @Column(name = "IS_ACTIVE")
@@ -55,11 +56,11 @@ public class User implements UserDetails,Serializable {
     int invalidAttemptCount;
 
     @Transient
-    @ValidPassword
+   // @ValidPassword
     private String retypePassword;
 
-    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY)
-    private Address address;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Address> addresses;
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -73,19 +74,29 @@ public class User implements UserDetails,Serializable {
     private List<Role> role;
 
 
+
     public User() {
         this.isDeleted = false;
         this.isActive = false;
         this.isExpired = false;
         this.isLocked = false;
         this.invalidAttemptCount = 0;
+
+
     }
 
-    public UUID getId() {
+
+    public String getUsername() {
+        return this.email;
+    }
+
+
+
+    public long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -125,6 +136,8 @@ public class User implements UserDetails,Serializable {
         return lastName;
     }
 
+
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -143,6 +156,18 @@ public class User implements UserDetails,Serializable {
 
     public Boolean getActive() {
         return isActive;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Set<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(Set<Address> addresses) {
+        this.addresses = addresses;
     }
 
     public void setActive(Boolean active) {
@@ -181,15 +206,21 @@ public class User implements UserDetails,Serializable {
         this.retypePassword = retypePassword;
     }
 
-    public Address getAddress() {
-        return address;
+    public Boolean getLoggedIn() {
+        return isLoggedIn;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setLoggedIn(Boolean loggedIn) {
+        isLoggedIn = loggedIn;
     }
 
+    public String getAccessToken() {
+        return accessToken;
+    }
 
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 
     public List<Role> getRole() {
         return role;
@@ -215,43 +246,19 @@ public class User implements UserDetails,Serializable {
                 ", isLocked=" + isLocked +
                 ", invalidAttemptCount=" + invalidAttemptCount +
                 ", retypePassword='" + retypePassword + '\'' +
-                ", address=" + address +
+                ", addresses=" + addresses +
+                ", role=" + role +
                 '}';
     }
 
+    public void addAddress(Address address){
+        if(address!=null){
+            if(addresses == null)
+                addresses = new HashSet<Address>();
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.role;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
+            System.out.println("address added");
+            address.setUser(this);
+            addresses.add(address);
+        }
     }
 }

@@ -10,14 +10,13 @@ import javax.persistence.Id;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 public class Token {
     @Id
     @GeneratedValue( strategy = GenerationType.AUTO)
     @Column(name = "USER_ID")
-    UUID id;
+    long id;
 
     @Column(name = "EMAIL")
     String email;
@@ -41,16 +40,15 @@ public class Token {
     private boolean isExpired;
 
     public boolean isExpired() {
-        // this is generic implementation, you can always make it timezone specific
         return getExpireAt().isBefore(LocalDateTime.now());
 
     }
 
-    public UUID getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(long id) {
         this.id = id;
     }
 

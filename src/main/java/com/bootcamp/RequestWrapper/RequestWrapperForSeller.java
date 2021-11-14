@@ -8,7 +8,7 @@ import javax.validation.Valid;
 
 @Component
 public class RequestWrapperForSeller {
-    @Valid
+
     User user;
 
     Seller seller;

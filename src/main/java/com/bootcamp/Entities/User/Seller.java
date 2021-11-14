@@ -1,32 +1,37 @@
 package com.bootcamp.Entities.User;
 
+import com.bootcamp.Entities.Product.Product;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.UUID;
+import java.util.Set;
+
 
 @Entity
 @PrimaryKeyJoinColumn(name="USER_ID",referencedColumnName = "ID")
-public class Seller extends User implements UserDetails, Serializable {
+public class Seller extends User implements  Serializable {
     @Column(name = "USER_ID")
-    UUID id;
+    long id;
     @Column(name ="GST")
     String gst;
     @Column(name ="COMPANY_CONTACT")
-    int companyContact;
+    long companyContact;
     @Column(name ="COMPANY_NAME")
     String companyName;
 
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
+    private Set<Product> products;
+
     @Override
-    public UUID getId() {
+    public long getId() {
         return id;
     }
 
     @Override
-    public void setId(UUID id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -38,11 +43,11 @@ public class Seller extends User implements UserDetails, Serializable {
         this.gst = gst;
     }
 
-    public int getCompanyContact() {
+    public long getCompanyContact() {
         return companyContact;
     }
 
-    public void setCompanyContact(int companyContact) {
+    public void setCompanyContact(long companyContact) {
         this.companyContact = companyContact;
     }
 

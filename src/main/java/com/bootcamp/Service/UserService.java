@@ -1,14 +1,16 @@
 package com.bootcamp.Service;
 
+import com.bootcamp.Dao.UserDao;
+import com.bootcamp.Dto.UseDto.AddressDto;
 import com.bootcamp.Entities.User.*;
 import com.bootcamp.Exceptions.*;
-import com.bootcamp.Repository.CustomerRepository;
-import com.bootcamp.Repository.SellerRepository;
-import com.bootcamp.Repository.TokenRepository;
-import com.bootcamp.Repository.UserRepository;
+import com.bootcamp.Repository.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,17 +21,12 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.List;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 @Primary
 public class UserService implements UserDetailsService {
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-
     @Autowired
     UserRepository userRepo;
     @Autowired
@@ -43,9 +40,15 @@ public class UserService implements UserDetailsService {
     @Autowired
     private TokenStore tokenStore;
     @Autowired
+    ModelMapper modelMapper;
+    @Autowired
     private SellerRepository sellerRepo;
     @Autowired
     CustomerRepository customerRepo;
+    @Autowired
+    AddressRepository addressRepo;
+    @Autowired
+    CurrentUserService currentUserService;
 
 
     public boolean registerAsAdmin(User user) {
@@ -103,30 +106,6 @@ public class UserService implements UserDetailsService {
 
         return true;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -192,16 +171,108 @@ public class UserService implements UserDetailsService {
             throw new NotFoundException("email does not exist");
     }
 
+    public String updatePassword(String password,String confirmPassword){
+        if(password.equals(confirmPassword)) {
+            String email = currentUserService.getUser();
+            String encodedPassword = encoder.encode(password);
+            userRepo.resetPassword(encodedPassword, email);
+            return "password updated successfully";
+
+        }
+        else
+            throw new BadRequestException("password and confirm password should be same");
+    }
 
 
+    public String addAddress(AddressDto addressDto){
+        String email=currentUserService.getUser();
+        User user=userRepo.findByEmail(email);
+        Address address=toAddress(addressDto);
+        address.setUser(user);
+        user.addAddress(address);
+        userRepo.save(user);
+        return "Address saved";
+    }
 
 
+    @Modifying
+    @Transactional
+    public String deleteAddress(Long id) {
+        String username=currentUserService.getUser();
+        Optional<Address> addressOptional=addressRepo.findById(id);
+        if(!addressOptional.isPresent()){
+            throw new NotFoundException("address not present");
+        }
+        Address savedAddress = addressOptional.get();
+        if(savedAddress.getUser().equals(username)){
+            addressRepo.deleteAddressById(id);
+            return "address deleted";
+        }
+        return "profile is updated";
+    }
 
 
+    public List<AddressDto> getAddress(){
+        Long[] l = {};
+        String email = currentUserService.getUser();
+        Customer customer = customerRepo.findByEmail(email);
+        Set<Address> addresses = customer.getAddresses();
+        List<AddressDto> list = new ArrayList<>();
+        if (addresses.isEmpty())
+        {
+            throw new NotFoundException("Address not found");
+        }
+        else
+        {
+            for (Address address : addresses)
+            {
+                AddressDto addressDTO = modelMapper.map(address,AddressDto.class);
+                list.add(addressDTO);
+
+            }
+
+        }
+        return list;
+    }
 
 
-
-
+    @Modifying
+    @Transactional
+    public void updateAddress(Long id, AddressDto address) {
+        String email=currentUserService.getUser();
+        User user=userRepo.findByEmail(email);
+        Set<Address> addresses=user.getAddresses();
+        Optional<Address> address1 = addressRepo.findById(id);
+        int count=0;
+        if(!address1.isPresent()){
+            throw new NotFoundException("Address not found");
+        }
+        else{
+            Address savedAddress2 = address1.get();
+            for (Address address2 : addresses) {
+                if (address1.get().getId() == address2.getId()) {
+                    if (address.getAddressLine() != null)
+                        address2.setAddressLine(address.getAddressLine());
+                    if (address.getCity() != null)
+                        address2.setCity(address.getCity());
+                    if (address.getCountry() != null)
+                        address2.setCountry(address.getCountry());
+                    if (address.getState() != null)
+                        address2.setState(address.getState());
+                    if (address.getZipCode() != null)
+                        address2.setZipCode(address.getZipCode().toString());
+                    address2.setUser(user);
+                    address2.setId(id);
+                    addressRepo.save(address2);
+                    count++;
+                }
+            }
+            if (count==0)
+            {
+                throw new NullException("you cannot update this address");
+            }
+        }
+    }
 
 
     public String logout(HttpServletRequest request){
@@ -216,8 +287,21 @@ public class UserService implements UserDetailsService {
     }
 
 
+    public Address toAddress(AddressDto addressDto){
+        if(addressDto != null)
+            return modelMapper.map(addressDto, Address.class);
+        return null;
+    }
+
+    public AddressDto toAddressDto(Address address){
+        if(address != null)
+            return modelMapper.map(address, AddressDto.class);
+        return null;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null; //sellerRepo.findByEmail(username);
+        User u=userRepo.findByEmail(username);
+        return new UserDao(u);
     }
 }

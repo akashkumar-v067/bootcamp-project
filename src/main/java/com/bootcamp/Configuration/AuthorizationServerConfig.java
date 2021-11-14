@@ -1,11 +1,11 @@
 package com.bootcamp.Configuration;
 
+import com.bootcamp.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -29,7 +29,7 @@ public class AuthorizationServerConfig  extends AuthorizationServerConfigurerAda
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserDetailsService userDetailsService;
+    UserService userDetailsService;
 
     public AuthorizationServerConfig() {
         super();
@@ -47,26 +47,26 @@ public class AuthorizationServerConfig  extends AuthorizationServerConfigurerAda
     @Override
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.tokenStore(tokenStore()).userDetailsService(userDetailsService)
-                .authenticationManager(authenticationManager)
-                .accessTokenConverter(accessTokenConverter());
-    }
-
-    @Bean
-    JwtAccessTokenConverter accessTokenConverter(){
-        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-        jwtAccessTokenConverter.setSigningKey("1234");
-        return jwtAccessTokenConverter;
-    }
-
-    @Bean
-    public TokenStore tokenStore() {
-        return new JwtTokenStore(accessTokenConverter());
+                .authenticationManager(authenticationManager);
+                //.accessTokenConverter(accessTokenConverter());
     }
 
 //    @Bean
-//    public TokenStore tokenStore() {
-//        return new InMemoryTokenStore();
+//    JwtAccessTokenConverter accessTokenConverter(){
+//        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+//        jwtAccessTokenConverter.setSigningKey("1234");
+//        return jwtAccessTokenConverter;
 //    }
+
+//    @Bean
+//    public TokenStore tokenStore() {
+//        return new JwtTokenStore(accessTokenConverter());
+//    }
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new InMemoryTokenStore();
+    }
 
 
     @Override
@@ -75,6 +75,7 @@ public class AuthorizationServerConfig  extends AuthorizationServerConfigurerAda
                 .withClient("live-test")
                 .secret(passwordEncoder.encode("abcde"))
                 .authorizedGrantTypes("password", "refresh_token")
+
                 .refreshTokenValiditySeconds(30 * 24 * 3600)
                 .scopes("app")
                 .accessTokenValiditySeconds(7 * 24 * 60);

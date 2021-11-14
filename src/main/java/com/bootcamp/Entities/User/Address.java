@@ -1,13 +1,13 @@
 package com.bootcamp.Entities.User;
 
 import javax.persistence.*;
-import java.util.UUID;
+
 
 @Entity
 public class Address {
     @Id
     @Column(name = "ID")
-    UUID id;
+    long id;
     @Column(name = "CITY")
     String city;
     @Column(name = "STATE")
@@ -22,15 +22,15 @@ public class Address {
     String label;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="USER_ID",referencedColumnName = "ID")
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
     private User user;
 
-    public UUID getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -12,9 +12,9 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-    UUID id;
+    long id;
     @Column(name = "CUSTOMER_USER_ID")
-    UUID customerUserId;
+    long customerUserId;
     @Column(name = "AMOUNT_PAID")
     int amountPaid;
     @Column(name = "DATE_CREATED", updatable = false)
@@ -33,5 +33,5 @@ public class Order {
     @Column(name = "CUSTOMER_ADDRESS_ZIP_CODE")
     String customerZipCode;
     @Column(name = "CUSTOMER_ADDRESS_LABEL")
-    String CUSTOMER_ADDRESS_LABEL;
+    String customerAddressLabel;
 }

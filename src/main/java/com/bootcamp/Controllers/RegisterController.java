@@ -18,7 +18,7 @@ import javax.validation.Valid;
 
 @EnableAutoConfiguration
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/register")
 public class RegisterController {
     @Autowired
     UserService userService;

@@ -5,23 +5,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
 
 @Entity
 @PrimaryKeyJoinColumn(name="USER_ID",referencedColumnName = "ID")
-public class Customer extends User implements UserDetails, Serializable {
-
+public class Customer extends User implements Serializable {
     @Column(name = "USER_ID")
-    UUID id;
+    long id;
     @Column(name = "CONTACT")
     String contact;
 
 
-    public UUID getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(long id) {
         this.id = id;
     }
 

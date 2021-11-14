@@ -1,30 +1,31 @@
 package com.bootcamp.Entities.User;
 
 import javax.persistence.*;
-import java.util.UUID;
+
 
 @Entity
 @Table(name = "USER_ROLE")
 public class UserRole {
     @Id
+    @GeneratedValue(strategy =GenerationType.IDENTITY )
     @Column(name = "USER_ID")
-    UUID userId;
+    long userId;
     @Column(name = "ROLE_ID")
-    UUID roleId;
+    long roleId;
 
-    public UUID getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(UUID userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    public UUID getRoleId() {
+    public long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(UUID roleId) {
+    public void setRoleId(long roleId) {
         this.roleId = roleId;
     }
 }

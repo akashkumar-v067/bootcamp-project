@@ -8,6 +8,7 @@ import com.bootcamp.Repository.TokenRepository;
 import com.bootcamp.Repository.UserRepository;
 import com.bootcamp.Service.EmailService;
 import com.bootcamp.Service.TokenService;
+import com.bootcamp.Service.UserService;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +34,8 @@ class BootcampApplicationTests {
 	CustomerRepository customerRepo;
   @Autowired
 	SellerRepository sellerRepo;
+  @Autowired
+	UserService userService;
 
 
 	@Test
@@ -55,10 +58,27 @@ class BootcampApplicationTests {
 	@Ignore
 	@Test
    public void test3(){
-
-
-		Seller u= sellerRepo.findByEmail("akashmii2000@gmail.com");
+        User u=userRepo.findByEmail("aligarhakash@gmail.com");
 		System.out.println(u);
+		//u.;
+		//System.out.println(u.getAuthorities());
+
+	}
+
+	@Ignore
+	@Test
+	public void test4(){
+		User u=userRepo.findById(1L).get();
+		System.out.println(u);
+
+
+	}
+	@Ignore
+	@Test
+	public void test5(){
+		UserDetails u= userService.loadUserByUsername("aligarhakash@gmail.com");
+		System.out.println(u);
+
 
 	}
 }
