@@ -8,7 +8,6 @@ public class RegisteredSellerDto {
     String username;
     Boolean isActive;
     String companyName;
-    AddressDto addressDTO;
     String companyContact;
 
     public RegisteredSellerDto() {
@@ -22,7 +21,6 @@ public class RegisteredSellerDto {
         this.username = email;
         this.isActive = isActive;
         this.companyName = companyName;
-        this.addressDTO = addressDTO;
         this.companyContact = companyContact;
     }
 
@@ -82,13 +80,6 @@ public class RegisteredSellerDto {
         this.companyName = companyName;
     }
 
-    public AddressDto getAddressDTO() {
-        return addressDTO;
-    }
-
-    public void setAddressDTO(AddressDto addressDTO) {
-        this.addressDTO = addressDTO;
-    }
 
     public String getCompanyContact() {
         return companyContact;

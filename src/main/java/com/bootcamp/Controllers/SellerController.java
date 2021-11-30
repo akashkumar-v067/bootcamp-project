@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @EnableAutoConfiguration
 @RestController
@@ -62,7 +63,6 @@ public class SellerController {
         sellerService.addAddress(address);
         return "Address added successfully";
     }
-
 
     @PutMapping("/address/update/{id}")
     String updateAddress(@Valid @RequestBody AddressDto addressDto, @PathVariable Long id){

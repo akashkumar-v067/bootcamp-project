@@ -28,6 +28,8 @@ public class AuthorizationServerConfig  extends AuthorizationServerConfigurerAda
     @Autowired
     AuthenticationManager authenticationManager;
 
+
+
     @Autowired
     UserService userDetailsService;
 
@@ -76,9 +78,11 @@ public class AuthorizationServerConfig  extends AuthorizationServerConfigurerAda
                 .secret(passwordEncoder.encode("abcde"))
                 .authorizedGrantTypes("password", "refresh_token")
 
-                .refreshTokenValiditySeconds(30 * 24 * 3600)
+                .refreshTokenValiditySeconds(604800)
                 .scopes("app")
-                .accessTokenValiditySeconds(7 * 24 * 60);
+                .accessTokenValiditySeconds(86400)
+
+        ;
     }
 
     @Override

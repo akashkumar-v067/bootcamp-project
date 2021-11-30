@@ -12,10 +12,4 @@ public class ProductReview {
     private long id;
     private String review;
     private String rating;
-
-    private Long customerId;
-    private Long productId;
-
-
-
 }

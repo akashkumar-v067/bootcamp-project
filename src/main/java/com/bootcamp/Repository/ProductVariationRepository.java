@@ -11,6 +11,18 @@ import java.util.List;
 
 @Repository
 public interface ProductVariationRepository extends CrudRepository<ProductVariation, Long> {
+
+   public ProductVariation findByProductId(long ProductId);
+
+
+
+
+
+
+
+
+
+
     @Query(value = "select product_id from product_variation where id =:id",nativeQuery = true)
     public Long getProductId(@Param(value = "id") Long id);
 

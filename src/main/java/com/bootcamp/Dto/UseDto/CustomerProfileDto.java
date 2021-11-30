@@ -11,10 +11,6 @@ public class CustomerProfileDto extends UserProfileDto{
     public CustomerProfileDto() {
     }
 
-    /*public CustomerProfileDto(Long id, String firstName, String lastName, Boolean isActive, String image, Long contact) {
-        super(id, firstName, lastName, isActive, image);
-        this.contact=contact;
-    }*/
     public CustomerProfileDto(@Size(min = 10, max = 10, message = "Contact number invalid") Long contact) {
         this.contact = contact;
     }

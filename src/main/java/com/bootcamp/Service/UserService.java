@@ -49,6 +49,8 @@ public class UserService implements UserDetailsService {
     AddressRepository addressRepo;
     @Autowired
     CurrentUserService currentUserService;
+    @Autowired
+    RoleRepository roleRepo;
 
 
     public boolean registerAsAdmin(User user) {
@@ -78,7 +80,13 @@ public class UserService implements UserDetailsService {
         }
         String encodedPassword = encoder.encode(seller.getPassword());
         seller.setPassword(encodedPassword);
-        seller.setRole(Arrays.asList(new Role("ROLE_SELLER")));
+        Optional<Role> r=roleRepo.findByauthority("ROLE_SELLER");
+        if(r.isPresent()){
+            seller.setRole(Arrays.asList(r.get()));
+        }
+        else {
+            seller.setRole(Arrays.asList(new Role("ROLE_SELLER")));
+        }
         userRepo.save(seller);
         emailService.sendSimpleMessage(seller.getEmail(), "Account Registered ", "your account is registered as seller." +
                 " \n" + "Waiting for approval from admin");
@@ -89,7 +97,7 @@ public class UserService implements UserDetailsService {
 
 
 
-    public boolean registerCustomer(Customer customer){
+    public boolean registerAsCustomer(Customer customer){
         if (userRepo.checkEmail(customer.getEmail())) {
             throw new EmailExistsException(customer.getEmail() + " already Exist");
         }
@@ -98,19 +106,20 @@ public class UserService implements UserDetailsService {
         }
         String encodedPassword = encoder.encode(customer.getPassword());
         customer.setPassword(encodedPassword);
-        customer.setRole(Arrays.asList(new Role("ROLE_CUSTOMER")));
+        Optional<Role> r=roleRepo.findByauthority("ROLE_CUSTOMER");
+        if(r.isPresent()){
+            customer.setRole(Arrays.asList(r.get()));
+        }
+        else {
+            customer.setRole(Arrays.asList(new Role("ROLE_CUSTOMER")));
+        }
         customerRepo.save(customer);
         Token t = tokenService.createToken(customer.getEmail());
         emailService.sendSimpleMessage(customer.getEmail(), "link to activate  account ", "your email is registered. click the link below to activate account\n\n" +
-                "http://localhost:8080/app/activation/" + customer.getEmail() + "/?token=" + t.getToken());
+                "http://localhost:8080/register/activation/" + customer.getEmail() + "/?token=" + t.getToken());
 
         return true;
     }
-
-
-
-
-
 
 
     public boolean activateUser(String email,String token){
@@ -157,14 +166,14 @@ public class UserService implements UserDetailsService {
 
     public void resendActivationLink(String email){
         if(userRepo.checkEmail(email)){
-            User u=userRepo.findByEmail(email);
+            User u=userRepo.findByEmail(email).get();
             if(u.getActive()){
                 throw new EmailAlreadyActiveException("Account is already active");
             }
             else{
                 Token t=tokenService.updateToken(email);
                 emailService.sendSimpleMessage(email,"Activation link","your email is registered. click the link below to activate account\n  " +
-                        "http://localhost:8080/app/activation/" + email + "/?token=" + t.getToken());
+                        "http://localhost:8080/register/activation/" + email + "/?token=" + t.getToken());
             }
         }
         else
@@ -186,7 +195,7 @@ public class UserService implements UserDetailsService {
 
     public String addAddress(AddressDto addressDto){
         String email=currentUserService.getUser();
-        User user=userRepo.findByEmail(email);
+        User user=userRepo.findByEmail(email).get();
         Address address=toAddress(addressDto);
         address.setUser(user);
         user.addAddress(address);
@@ -213,7 +222,6 @@ public class UserService implements UserDetailsService {
 
 
     public List<AddressDto> getAddress(){
-        Long[] l = {};
         String email = currentUserService.getUser();
         Customer customer = customerRepo.findByEmail(email);
         Set<Address> addresses = customer.getAddresses();
@@ -240,7 +248,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void updateAddress(Long id, AddressDto address) {
         String email=currentUserService.getUser();
-        User user=userRepo.findByEmail(email);
+        User user=userRepo.findByEmail(email).get();
         Set<Address> addresses=user.getAddresses();
         Optional<Address> address1 = addressRepo.findById(id);
         int count=0;
@@ -277,7 +285,6 @@ public class UserService implements UserDetailsService {
 
     public String logout(HttpServletRequest request){
         String authHeader = request.getHeader("Authorization");
-        System.out.println(authHeader);
         if (authHeader != null) {
             String tokenValue = authHeader.replace("Bearer", "").trim();
             OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
@@ -301,7 +308,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User u=userRepo.findByEmail(username);
+       User u=userRepo.findByEmail(username).get();
         return new UserDao(u);
     }
 }

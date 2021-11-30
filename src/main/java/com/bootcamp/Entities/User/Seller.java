@@ -1,6 +1,7 @@
 package com.bootcamp.Entities.User;
 
 import com.bootcamp.Entities.Product.Product;
+import com.bootcamp.Validation.ValidGST;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,9 +13,10 @@ import java.util.Set;
 
 @Entity
 @PrimaryKeyJoinColumn(name="USER_ID",referencedColumnName = "ID")
-public class Seller extends User implements  Serializable {
+public class Seller extends User implements Serializable {
     @Column(name = "USER_ID")
     long id;
+    //@ValidGST(message = "GST Should be valid")
     @Column(name ="GST")
     String gst;
     @Column(name ="COMPANY_CONTACT")

@@ -1,7 +1,6 @@
 package com.bootcamp.Controllers;
 
 import com.bootcamp.Entities.User.Customer;
-import com.bootcamp.RequestWrapper.RequestWrapperForSeller;
 import com.bootcamp.Entities.User.Seller;
 import com.bootcamp.Entities.User.User;
 import com.bootcamp.Exceptions.BadRequestException;
@@ -23,7 +22,7 @@ public class RegisterController {
     @Autowired
     UserService userService;
 
-    @PostMapping(path = "/registration/admin")
+    @RequestMapping(path = "/registration/admin",method = RequestMethod.POST)
     public ResponseEntity<User> registerUser(@Valid @RequestBody User user){
           if(userService.registerAsAdmin(user)){
               return new ResponseEntity<User>(user,HttpStatus.CREATED);
@@ -43,15 +42,12 @@ public class RegisterController {
 
     @PostMapping(path = "/registration/customer")
     public ResponseEntity<Customer> registerUser(@Valid @RequestBody Customer customer){
-        if(userService.registerCustomer(customer)){
+        if(userService.registerAsCustomer(customer)){
             return new ResponseEntity<Customer>(customer,HttpStatus.CREATED);
         }
         else
             throw new BadRequestException("error registering customer");
     }
-
-
-
 
 
     @PutMapping(path="/activation/{email}/")

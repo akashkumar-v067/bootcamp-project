@@ -1,6 +1,7 @@
 package com.bootcamp.Dto.UseDto;
 
 
+import com.bootcamp.Validation.ValidGST;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import javax.validation.constraints.Size;
 
 public class SellerDto extends UserDto {
     @Column(unique = true)
-    //@Pattern(regexp = "\\d{2}[A-Z]{5}\\d{4}[A-Z]{1}[A-Z\\d]{1}[Z]{1}[A-Z\\d]{1}")
+    @ValidGST(message = "gst should be valid")
     private String gst;
 
     @Column(unique = true)

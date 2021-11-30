@@ -28,60 +28,54 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
     @Autowired
-    CurrentUserService currentUserService;
-    @Autowired
     UserService userService;
-    @Autowired
-    SellerService sellerService;
+
 
     @GetMapping("/home")
-    ResponseEntity customerhome(){
+    ResponseEntity customerHome(){
         String msg="customer home";
         return new ResponseEntity(msg, HttpStatus.OK);
     }
 
-    @GetMapping("/customer/profile")
-    CustomerProfileDto viewprofile(HttpServletRequest request){
+    @GetMapping("/profile")
+    CustomerProfileDto viewProfile(HttpServletRequest request){
         return customerService.viewProfile();
     }
 
-    @PatchMapping("/customer/profile/update")
-    void updateprofile(@RequestBody CustomerDto customerDto){
-        customerService.updateProfile(customerDto);
+    @PatchMapping("/profile/update")
+    ResponseEntity<String> updateProfile(@Valid @RequestBody CustomerDto customerDto){
+        return customerService.updateProfile(customerDto);
     }
 
 
-    @GetMapping("/customer/address")
+    @GetMapping("/getAddress")
     List<AddressDto> viewAddress(){
         return userService.getAddress();
     }
 
 
-    @PostMapping("/customer/address/add")
+    @PostMapping("/address/add")
     String addAddress(@Valid @RequestBody AddressDto addressDto){
         return userService.addAddress(addressDto);
     }
 
 
-    @DeleteMapping("/customer/address/delete")
+    @DeleteMapping("/address/delete")
     String deleteAddress(@RequestParam("id") Long id){
         return userService.deleteAddress(id);
     }
 
 
-    @PutMapping("/customer/address/update/{id}")
+    @PutMapping("/address/update/{id}")
     String updateAddress(@Valid @RequestBody AddressDto addressDto, @PathVariable Long id){
         userService.updateAddress(id, addressDto);
         return "Address with id "+id+" updated successfully";
     }
 
 
-    @PatchMapping("/customer/password/update")
-    String updatePassword(@RequestHeader String Password, @RequestHeader String ConfirmPassword) {
-        return userService.updatePassword(Password, ConfirmPassword);
+    @PatchMapping("/password/update")
+    String updatePassword(@RequestHeader String password, @RequestHeader String confirmPassword) {
+        return userService.updatePassword(password, confirmPassword);
     }
-
-
-
 
 }

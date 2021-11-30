@@ -8,7 +8,6 @@ public class UserProfileDto {
     private String firstName;
     private String lastName;
     private Boolean isActive;
-    private String image;
 
     public UserProfileDto() {
     }
@@ -18,7 +17,6 @@ public class UserProfileDto {
         this.firstName = firstName;
         this.lastName = lastName;
         this.isActive = isActive;
-        this.image = image;
     }
 
     public Long getId() {
@@ -53,11 +51,4 @@ public class UserProfileDto {
         isActive = active;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 }

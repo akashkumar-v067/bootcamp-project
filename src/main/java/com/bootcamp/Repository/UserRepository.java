@@ -1,5 +1,6 @@
 package com.bootcamp.Repository;
 
+import com.bootcamp.Dao.UserDao;
 import com.bootcamp.Entities.User.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,10 +19,12 @@ public interface UserRepository extends JpaRepository<User, Long> , PagingAndSor
 
     @Query("select count(*) > 0 from User where email=:email")
     public boolean checkEmail(String email);
+
     Optional<User> findById(Long id);
 
 
-     public User findByEmail(String email);
+     //public User findByEmail(String email);
+    public Optional<User> findByEmail(String email);
 
 
      public UserDetails findByphoneNumber(String phoneNumber);

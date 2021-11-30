@@ -7,9 +7,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 @Component
 public class CustomerDto extends UserDto{
-    //@NotNull
-    //@NotEmpty
-    //@Size(min = 10, max = 10)
+    @NotNull
+    @NotEmpty
+    @Size(min = 10, max = 10)
     Long contact;
 
     public CustomerDto() { }

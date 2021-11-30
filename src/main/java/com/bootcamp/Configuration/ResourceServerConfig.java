@@ -19,7 +19,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @Configuration
 @EnableResourceServer
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
@@ -27,13 +27,32 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public ResourceServerConfig() {
+    @Autowired
+    private final LockAuthenticationManager lockAuthenticationManager;
+
+    public ResourceServerConfig(LockAuthenticationManager lockAuthenticationManager) {
         super();
+        this.lockAuthenticationManager = lockAuthenticationManager;
     }
+
+
+//    public ResourceServerConfig() {
+//        super();
+//    }
 
 //    @Bean
 //    public static BCryptPasswordEncoder bCryptPasswordEncoder() {
 //        return new BCryptPasswordEncoder();
+//    }
+
+//    @Bean
+//    public AuthenticationProvider authenticationProvider() {
+//        final  LoginFailedAttempt loginFailedAttempt = new LoginFailedAttempt();
+//        loginFailedAttempt.setUserDetailsService(userDetailsService);
+//        loginFailedAttempt.setPasswordEncoder(bCryptPasswordEncoder);
+//
+//
+//        return loginFailedAttempt;
 //    }
 
     @Bean
@@ -43,10 +62,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         authenticationProvider.setPasswordEncoder(bCryptPasswordEncoder);
         return authenticationProvider;
     }
-
     @Autowired
     public void configureGlobal(final AuthenticationManagerBuilder authenticationManagerBuilder) {
         authenticationManagerBuilder.authenticationProvider(authenticationProvider());
+
+        //Adding here new authentication provider
+        authenticationManagerBuilder.authenticationProvider(lockAuthenticationManager);
     }
 
     @Override
@@ -57,17 +78,23 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .antMatchers("/seller/**").hasAnyRole("SELLER","ADMIN")
                 .antMatchers("/customer/**").hasAnyRole("CUSTOMER","ADMIN")
-                .antMatchers("category/admin").hasAnyRole("ADMIN")
-                .antMatchers("category/seller").hasAnyRole("ADMIN","SELLER")
-                .antMatchers("category/customer").hasAnyRole("ADMIN","CUSTOMER")
-                .antMatchers("product/admin").hasAnyRole("ADMIN")
-                .antMatchers("product/seller").hasAnyRole("SELLER")
-                .antMatchers("product/customer").hasAnyRole("CUSTOMER")
+                .antMatchers("/category/admin/**").hasAnyRole("ADMIN")
+                .antMatchers("/category/seller/**").hasAnyRole("ADMIN","SELLER")
+                .antMatchers("/category/customer/**").hasAnyRole("ADMIN","CUSTOMER")
+                .antMatchers("/product/admin").hasAnyRole("ADMIN")
+                .antMatchers("/product/seller").hasAnyRole("SELLER")
+                .antMatchers("/product/customer").hasAnyRole("CUSTOMER")
+                .antMatchers("/cart/**").hasAnyRole("CUSTOMER")
+                //.antMatchers("/order/**")
+               // .antMatchers("/order/seller/**").hasAnyRole("SELLER")
                 .anyRequest().permitAll()//.authenticated()
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .csrf().disable();
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .csrf()
+                .disable()
+        ;
     }
 
 }

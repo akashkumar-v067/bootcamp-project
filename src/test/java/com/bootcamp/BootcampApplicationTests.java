@@ -46,7 +46,7 @@ class BootcampApplicationTests {
 	@Test
 	public void test1(){
 		tokenService.updateToken("aligarhakash@gmail.com");
-		System.out.println("hello");
+
 	}
 	@Ignore
 	@Test
@@ -58,10 +58,9 @@ class BootcampApplicationTests {
 	@Ignore
 	@Test
    public void test3(){
-        User u=userRepo.findByEmail("aligarhakash@gmail.com");
-		System.out.println(u);
-		//u.;
-		//System.out.println(u.getAuthorities());
+        //User u=userRepo.findByEmail("aligarhakash@gmail.com");
+
+
 
 	}
 
@@ -69,7 +68,7 @@ class BootcampApplicationTests {
 	@Test
 	public void test4(){
 		User u=userRepo.findById(1L).get();
-		System.out.println(u);
+
 
 
 	}
@@ -77,7 +76,7 @@ class BootcampApplicationTests {
 	@Test
 	public void test5(){
 		UserDetails u= userService.loadUserByUsername("aligarhakash@gmail.com");
-		System.out.println(u);
+
 
 
 	}

@@ -167,7 +167,6 @@ public class ProductService {
         String email=currentUserService.getUser();
         Seller seller= sellerRepo.findByEmail(email);
         Optional<Product> product=  productRepo.findById(productId);
-        Long[] l = {};
         if (product.isPresent()) {
             if (/*(product.get().getSeller().getEmail()).equals(seller1.getEmail())*/(product.get().getSeller().getEmail()).equals(seller.getEmail())) {
                 ProductDto viewProductDTO = new ProductDto();
@@ -188,8 +187,6 @@ public class ProductService {
                 }
                 viewProductDTO.setFieldName(fields);
                 viewProductDTO.setValues(values);
-
-
                 return viewProductDTO;
             } else {
                 throw new NotFoundException("not found");

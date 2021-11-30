@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.UUID;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    @Query(value = "select * from user inner join customer where email=:email",nativeQuery = true)
+
     public Customer findByEmail(String email);
 
     @Query("select count(*) > 0 from Customer where email=:email")

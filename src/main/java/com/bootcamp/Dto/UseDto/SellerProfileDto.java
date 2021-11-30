@@ -1,10 +1,6 @@
 package com.bootcamp.Dto.UseDto;
 
 
-
-//import jdk.nashorn.internal.objects.annotations.Getter;
-import org.springframework.stereotype.Component;
-
 import javax.validation.constraints.Size;
 
 public class SellerProfileDto extends UserProfileDto {

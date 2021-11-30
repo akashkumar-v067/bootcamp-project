@@ -17,15 +17,11 @@ public class UserDao implements UserDetails {
     @Autowired
     UserRepository userRepo;
 
-    private String username;
-    private String password;
 
     private User user;
 
     public UserDao(User user) {
         this.user = user;
-        this.username=user.getEmail();
-        this.password=user.getPassword();
     }
 
     @Override
@@ -39,23 +35,16 @@ public class UserDao implements UserDetails {
         return roleNames;
     }
 
-    public void setUsername() {
-        this.username = user.getEmail();
-    }
-
-    public void setPassword() {
-        this.password = user.getPassword();
-    }
-
     @Override
     public String getPassword() {
-        return this.password;
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return this.username;
+        return user.getUsername();
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
@@ -64,7 +53,7 @@ public class UserDao implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !user.getLocked();
     }
 
     @Override
@@ -77,13 +66,5 @@ public class UserDao implements UserDetails {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                "role: "+getAuthorities()+"\n"+
-                        isAccountNonExpired()+isAccountNonLocked()+
-                '}';
-    }
+
 }

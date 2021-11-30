@@ -32,7 +32,7 @@ public class TokenService{
         Token token = new Token();
         token.setToken(tokenValue);
         token.setExpireAt(LocalDateTime.now().plusSeconds(999999999));
-        User u=userRepo.findByEmail(email);
+        User u=userRepo.findByEmail(email).get();
         token.setEmail(email);
         tokenRepo.save(token);
         return token;

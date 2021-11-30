@@ -39,7 +39,6 @@ public class SellerService {
 
     public Seller convtToSeller(SellerDto sellerDto){
         Seller seller =modelMapper.map(sellerDto, Seller.class);
-        System.out.println("dto to seller object");
         return seller;
     }
 
@@ -86,7 +85,7 @@ public class SellerService {
 
     public String addAddress(Address address){
         String email=currentUserService.getUser();
-        User user=userRepo.findByEmail(email);
+        User user=userRepo.findByEmail(email).get();
         address.setUser(user);
          //addressRepo.save(address);
          user.addAddress(address);

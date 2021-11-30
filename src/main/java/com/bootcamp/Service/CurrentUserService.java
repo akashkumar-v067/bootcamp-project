@@ -59,7 +59,6 @@ public class CurrentUserService {
         } else {
             username = principal.toString();
         }
-        System.out.println("username is " + username);
         return username;
 
     }

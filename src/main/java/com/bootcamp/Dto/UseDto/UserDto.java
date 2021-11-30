@@ -2,6 +2,7 @@ package com.bootcamp.Dto.UseDto;
 
 
 import com.bootcamp.Validation.ValidEmail;
+import com.bootcamp.Validation.ValidPassword;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
@@ -38,7 +39,7 @@ public class UserDto {
     @Column(nullable = false)
     @NotEmpty(message = "Password cant be null")
     @Size(min = 8)
-    //@ValidPassword
+    @ValidPassword
     private String password;
 
     private String confirmPassword;

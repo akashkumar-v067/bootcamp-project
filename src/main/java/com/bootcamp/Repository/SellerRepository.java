@@ -16,4 +16,7 @@ public interface SellerRepository extends JpaRepository<Seller, Long> , CrudRepo
       @Query(value = "select * from user inner join seller where user.id=seller.user_id and email=:username",nativeQuery = true)
       public Seller findByUsername(String username);
 
+   @Query("select count(*) > 0 from User where email=:email")
+   public boolean checkEmail(String email);
+
 }

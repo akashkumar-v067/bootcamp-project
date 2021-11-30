@@ -23,6 +23,30 @@ public interface ProductRepository extends CrudRepository<Product, Long>{
     List<Product> findAll(Pageable pageable);
     List<Product> findByCategoryId(Long id, Pageable pageable);
 
+    List<Product> findAllBySellerId(long SellerId);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Query(value = "select * from product where is_active=:'true'", nativeQuery = true)
     Product activeProducts();
 

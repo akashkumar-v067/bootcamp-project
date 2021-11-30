@@ -7,15 +7,12 @@ import com.bootcamp.Entities.Product.CategoryMetadataFieldValues;
 import com.bootcamp.Exceptions.NotFoundException;
 import com.bootcamp.Exceptions.NullException;
 import com.bootcamp.Repository.*;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -27,7 +24,6 @@ public class CategoryService {
     CategoryMetadataFieldRepository categoryMetadataFieldRepo;
     @Autowired
     CategoryMetadataFieldValuesRepository categoryMetadataFieldValuesRepo;
-
     @Autowired
     CategoryRepository categoryRepo;
 

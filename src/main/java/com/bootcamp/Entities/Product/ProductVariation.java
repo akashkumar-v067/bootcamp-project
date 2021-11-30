@@ -1,9 +1,13 @@
 package com.bootcamp.Entities.Product;
 
+import com.bootcamp.Entities.Order.Cart;
 import com.bootcamp.Entities.Order.OrderProduct;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Set;
 
 @Entity
@@ -11,14 +15,14 @@ public class ProductVariation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Positive
+    @JsonIgnore
+    @PositiveOrZero
     @Column(nullable = false)
     private Integer quantityAvailable;
     @Positive
     @Column(nullable = false)
     private Double price;
     private String metadata;
-    private String primaryImageName;
     private String infoJson;
     private Boolean isActive;
 
@@ -26,9 +30,11 @@ public class ProductVariation {
     @JoinColumn(name = "product_id")
     private Product product;
 
-//    @OneToMany(mappedBy = "productVariation",cascade = CascadeType.ALL)
-//    private Set<OrderProduct> orderProducts;
+    @OneToMany(mappedBy = "productVariation",cascade = CascadeType.ALL)
+    private Set<OrderProduct> orderProducts;
 
+    @OneToMany(mappedBy = "productVariation",cascade = CascadeType.ALL)
+    private Set<Cart> carts;
 
     public Long getId() {
         return id;
@@ -62,13 +68,6 @@ public class ProductVariation {
         this.metadata = metadata;
     }
 
-    public String getPrimaryImageName() {
-        return primaryImageName;
-    }
-
-    public void setPrimaryImageName(String primaryImageName) {
-        this.primaryImageName = primaryImageName;
-    }
 
     public String getInfoJson() {
         return infoJson;
@@ -78,12 +77,13 @@ public class ProductVariation {
         this.infoJson = infoJson;
     }
 
-    public Boolean getActive() {
-        return isActive;
-    }
-
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public Boolean getActive() {
+        return isActive;
     }
 
     public Product getProduct() {

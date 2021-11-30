@@ -2,17 +2,12 @@ package com.bootcamp.Controllers;
 
 import com.bootcamp.Dto.UseDto.RegisteredCustomerDto;
 import com.bootcamp.Dto.UseDto.RegisteredSellerDto;
-import com.bootcamp.Entities.User.Customer;
-import com.bootcamp.Entities.User.Seller;
-import com.bootcamp.Entities.User.User;
-import com.bootcamp.Exceptions.EmailAlreadyActiveException;
-import com.bootcamp.Exceptions.NotFoundException;
 import com.bootcamp.Repository.UserRepository;
 import com.bootcamp.Service.AdminService;
 import com.bootcamp.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +22,8 @@ public class AdminController {
     AdminService adminService;
     @Autowired
     UserRepository userRepo;
+
+
 
     //1. User hits the api to obtain all registered seller
 
@@ -49,22 +46,22 @@ public class AdminController {
 
 
     @PutMapping(path="/activateCustomer/{email}")
-    public String activateCustomer(@PathVariable("email") String email){
+    public ResponseEntity activateCustomer(@PathVariable("email") String email){
         return adminService.activateCustomer(email);
     }
 
     @PutMapping(path="/deactivateCustomer/{email}")
-    public String deactivateCustomer(@PathVariable("email") String email){
+    public ResponseEntity deactivateCustomer(@PathVariable("email") String email){
        return adminService.deactivateCustomer(email);
     }
 
     @PutMapping(path="/activateSeller/{email}")
-    public String activateSeller(@PathVariable("email") String email){
+    public ResponseEntity activateSeller(@PathVariable("email") String email){
        return adminService.activateSeller(email);
     }
 
     @PutMapping(path="/deactivateSeller/{email}")
-    public String deactivateSeller(@PathVariable("email") String email){
+    public ResponseEntity deactivateSeller(@PathVariable("email") String email){
         return adminService.deactivateSeller(email);
     }
 

@@ -2,6 +2,7 @@ package com.bootcamp.Entities.User;
 
 import com.bootcamp.Repository.SellerRepository;
 import com.bootcamp.Validation.ValidPassword;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.GrantedAuthority;
@@ -58,18 +59,18 @@ public class User implements Serializable {
     @Transient
    // @ValidPassword
     private String retypePassword;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Address> addresses;
 
-
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "USER_ROLE",
             joinColumns = @JoinColumn(
                     name = "USER_ID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(
-                    name = "ROLE_ID", referencedColumnName = "RID"))
+                    name = "ROLE_ID", referencedColumnName = "ID"))
 
     private List<Role> role;
 
@@ -255,8 +256,6 @@ public class User implements Serializable {
         if(address!=null){
             if(addresses == null)
                 addresses = new HashSet<Address>();
-
-            System.out.println("address added");
             address.setUser(this);
             addresses.add(address);
         }

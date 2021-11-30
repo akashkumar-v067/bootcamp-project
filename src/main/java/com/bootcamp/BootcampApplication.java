@@ -1,5 +1,7 @@
 package com.bootcamp;
 
+import com.bootcamp.Entities.User.Customer;
+import com.bootcamp.Entities.User.Seller;
 import com.bootcamp.Entities.User.User;
 import com.bootcamp.Service.UserService;
 import org.modelmapper.ModelMapper;
@@ -8,18 +10,9 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+
 
 @SpringBootApplication
 public class BootcampApplication implements ApplicationRunner {
@@ -32,14 +25,38 @@ public class BootcampApplication implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		User u1=new User();
-		u1.setEmail("admin@gmail.com");
-		u1.setFirstName("akash");
-		u1.setLastName("kumar");
-		u1.setPhoneNumber("1234567899");
-		u1.setPassword("admin");
-		u1.setRetypePassword("admin");
-		userService.registerAsAdmin(u1);
+//		User u1=new User();
+//		u1.setEmail("admin@gmail.com");
+//		u1.setFirstName("admin");
+//		u1.setLastName("ok");
+//		u1.setPhoneNumber("1234567899");
+//		u1.setPassword("ttn");
+//		u1.setRetypePassword("ttn");
+//		userService.registerAsAdmin(u1);
+//
+//		Seller s1=new Seller();
+//		s1.setEmail("seller@gmail.com");
+//		s1.setFirstName("seller");
+//		s1.setLastName("ok");
+//		s1.setPhoneNumber("1234567898");
+//		s1.setPassword("ttn");
+//		s1.setRetypePassword("ttn");
+//		s1.setCompanyName("to the new");
+//		s1.setActive(true);
+//		userService.registerAsSeller(s1);
+//
+//
+//		Customer c1=new Customer();
+//		c1.setEmail("customer@gmail.com");
+//		c1.setFirstName("customer");
+//		c1.setLastName("ok");
+//		c1.setPhoneNumber("1234567897");
+//		c1.setPassword("ttn");
+//		c1.setRetypePassword("ttn");
+//		c1.setActive(true);
+//		c1.setContact("919990102944");
+//		userService.registerAsCustomer(c1);
+
 	}
 
 	@Bean
