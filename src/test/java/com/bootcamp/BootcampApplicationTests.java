@@ -1,14 +1,12 @@
 package com.bootcamp;
 
-import com.bootcamp.Entities.User.Seller;
-import com.bootcamp.Entities.User.User;
-import com.bootcamp.Repository.CustomerRepository;
-import com.bootcamp.Repository.SellerRepository;
-import com.bootcamp.Repository.TokenRepository;
-import com.bootcamp.Repository.UserRepository;
-import com.bootcamp.Service.EmailService;
-import com.bootcamp.Service.TokenService;
-import com.bootcamp.Service.UserService;
+import com.bootcamp.entities.user.User;
+import com.bootcamp.repository.CustomerRepository;
+import com.bootcamp.repository.SellerRepository;
+import com.bootcamp.repository.UserRepository;
+import com.bootcamp.service.EmailService;
+import com.bootcamp.service.TokenService;
+import com.bootcamp.service.UserService;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -16,9 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
